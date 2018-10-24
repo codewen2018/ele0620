@@ -18,7 +18,6 @@ Route::get('/', function () {
 
 Route::domain("admin.ele.com")->namespace("Admin")->group(function (){
 
-
     //商户分类
     Route::get("shopCate/index","ShopCategoryController@index")->name("admin.shopCate.index");
 
@@ -31,7 +30,12 @@ Route::domain("admin.ele.com")->namespace("Admin")->group(function (){
 Route::domain("shop.ele.com")->namespace("Shop")->group(function (){
 
 
+//商户首页
+    Route::get("index/index","IndexController@index")->name("shop.index.index");
+
     //商户分类
+    Route::get("user/index","UserController@index")->name("shop.user.index");
+    Route::get("user/add","UserController@add")->name("shop.user.add");
 
 
 
