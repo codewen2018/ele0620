@@ -237,17 +237,17 @@
 | notice           | string  | 店公告                    |
 | discount         | string  | 优惠信息                  |
 | status           | int     | 状态:1正常,0待审核,-1禁用 |
+| user_id          | int     | 用户Id                    |
 
 #### 商家账号表users
 
-| 字段名称       | 类型    | 备注     |
-| -------------- | ------- | -------- |
-| id             | primary | 主键     |
-| name           | string  | 名称     |
-| email          | email   | 邮箱     |
-| password       | string  | 密码     |
-| remember_token | string  | toke     |
-| shop_id        | int     | 所属商家 |
+| 字段名称       | 类型    | 备注 |
+| -------------- | ------- | ---- |
+| id             | primary | 主键 |
+| name           | string  | 名称 |
+| email          | email   | 邮箱 |
+| password       | string  | 密码 |
+| remember_token | string  | toke |
 
 #### 平台管理员表admins
 

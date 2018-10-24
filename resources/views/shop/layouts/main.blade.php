@@ -29,7 +29,7 @@
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
 <div class="wrapper">
 
         @include("shop.layouts._header")
@@ -54,7 +54,15 @@
         <section class="content">
 
 
-                @yield("content")
+
+                    @include("shop.layouts._msg")
+                    @include("shop.layouts._error")
+                    @yield("content")
+
+
+
+
+
 
 
         </section>
