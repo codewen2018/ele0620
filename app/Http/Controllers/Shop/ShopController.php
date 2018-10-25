@@ -7,14 +7,18 @@ use App\Models\ShopCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ShopController extends BaseController
 {
     public function add(Request $request)
     {
+
+
+
         //判断当前用户是否已有店铺
         if (Auth::user()->shop){
-            return redirect()->back()->with("danger","已有店铺不能再创建");
+            return back()->with("danger","已有店铺不能再创建");
         }
         //判断是不是POST提交
         if ($request->isMethod("post")) {
@@ -41,7 +45,7 @@ class ShopController extends BaseController
             //判断是否上传了图片
             if ($file) {
                 //存在就上传
-                $data['shop_img'] =$file->store("shop", 'public');
+                $data['shop_img'] =$file->store("shop");
 
             }
 
@@ -57,6 +61,11 @@ class ShopController extends BaseController
         $cates = ShopCategory::where("status", 1)->get();
         //显示视图并赋值
         return view("shop.shop.add", compact('cates'));
+
+    }
+
+    public function edit(Request $request,$userId)
+    {
 
     }
 }

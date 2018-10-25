@@ -260,3 +260,111 @@
 | remember_token | string  | token |
 
 ### 要点难点及解决方案
+
+
+
+
+
+## Day02
+
+### 开发任务
+
+- 完善day1的功能，要用事务保证同时删除用户和店铺，删除图片
+- 平台：平台管理员账号管理
+- 平台：管理员登录和注销功能，修改个人密码(参考微信修改密码功能)
+- 平台：商户账号管理，重置商户密码
+- 商户端：商户登录和注销功能，修改个人密码
+- 修改个人密码需要用到验证密码功能,[参考文档](https://laravel-china.org/docs/laravel/5.5/hashing)
+- 商户登录正常登录，登录之后判断店铺状态是否为1，不为1不能做任何操作
+
+### 实现步骤
+
+1. 在商户端口和平台端都要创建BaseController 以后都要继承自己的BaseController
+
+2. 商户的登录和以前一样
+
+3. 平台的登录，模型中必需继承 use Illuminate\Foundation\Auth\User as Authenticatable
+
+4. 设置配置文件config/auth.php 
+
+   ```php
+    'guards' => [
+           //添加一个guards
+           'admin' => [
+               'driver' => 'session',
+               'provider' => 'admins',//数据提示者
+           ],
+   
+          
+       ],
+    'providers' => [
+        //提供商户登录
+           'users' => [
+               'driver' => 'eloquent',
+               'model' => \App\Models\User::class,
+           ],
+        //提供平台登录
+           'admins' => [
+               'driver' => 'eloquent',
+               'model' => \App\Models\Admin::class,
+           ],
+       ],
+   ```
+
+5. 平台登录的时候
+
+   ```php
+   Auth::guard('admin')->attempt(['name'=>$request->post('name'),'password'=>$request->password])
+   ```
+
+6. 平台AUTH权限判断
+
+   ```php
+   public function __construct()
+       {
+           $this->middleware('auth:admin')->except("login");
+       }
+   
+   ```
+
+7. 设置认证失败后回跳地址 在Exceptions/Handler.php后面添加
+
+   ```php
+   /**
+        * 重写实现未认证用户跳转至相应登陆页
+        * @param \Illuminate\Http\Request $request
+        * @param AuthenticationException $exception
+        * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+        */
+       protected function unauthenticated($request, AuthenticationException $exception)
+       {
+   
+           //return $request->expectsJson()
+           //            ? response()->json(['message' => $exception->getMessage()], 401)
+           //            : redirect()->guest(route('login'));
+           if ($request->expectsJson()) {
+               return response()->json(['message' => $exception->getMessage()], 401);
+           } else {
+               return in_array('admin', $exception->guards()) ? redirect()->guest('/admin/login') : redirect()->guest(route('user.login'));
+           }
+       }
+   ```
+
+## DAY03
+
+### 开发任务
+
+商户端 
+
+- 菜品分类管理 
+- 菜品管理 
+  要求 
+- 一个商户只能有且仅有一个默认菜品分类 
+- 只能删除空菜品分类 
+- 必须登录才能管理商户后台（使用中间件实现） 
+- 可以按菜品分类显示该分类下的菜品列表 
+- 可以根据条件（按菜品名称和价格区间）搜索菜品
+
+### 实现步骤
+
+### 要点难点

@@ -25,12 +25,13 @@ class AdminController extends BaseController
         if ($request->isMethod("post")) {
 
             //验证
-            $this->validate($request, [
+           $data= $this->validate($request, [
                 'name' => "required",
                 'password' => "required"
             ]);
+           // $data=$request->post();
             //验证账号密码
-            if (Auth::guard("admin")->attempt(['name' => $request->post('name'), 'password' => $request->password])) {
+            if (Auth::guard("admin")->attempt($data)) {
                 // session()->flash("success","登录成功");
                 //登录成功
                 return redirect()->route("admin.shop.index")->with("success", "登录成功");
