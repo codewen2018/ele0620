@@ -27,6 +27,7 @@ class ShopController extends BaseController
     public function changeStatus($id)
     {
 
+        //就是一个对象
         $shop = Shop::findOrFail($id);
         $shop->status = 1;
         $shop->save();
@@ -34,6 +35,16 @@ class ShopController extends BaseController
 
     }
 
+    /**
+     * 添加店铺
+     *
+     */
+    public function add(Request $request,$userId)
+    {
+
+        dd($userId);
+
+    }
     /**
      * 删除店铺
      */

@@ -354,16 +354,56 @@
 
 ### 开发任务
 
-商户端 
+#### 商户端 
 
-- 菜品分类管理 
-- 菜品管理 
-  要求 
-- 一个商户只能有且仅有一个默认菜品分类 
-- 只能删除空菜品分类 
-- 必须登录才能管理商户后台（使用中间件实现） 
-- 可以按菜品分类显示该分类下的菜品列表 
+- 菜品分类管理 
+- 菜品管理 
+
+#### 要求
+
+- 一个商户只能有且仅有一个默认菜品分类 
+- 只能删除空菜品分类 
+- 必须登录才能管理商户后台（使用中间件实现） 
+- 可以按菜品分类显示该分类下的菜品列表 
 - 可以根据条件（按菜品名称和价格区间）搜索菜品
+
+
+
+
+
+### 数据表设计
+
+
+
+#### 菜品分类表 menu_categories
+
+| 字段名称          | 类型    | 备注                    |
+| ----------------- | ------- | ----------------------- |
+| id                | primary | 主键                    |
+| name              | string  | 名称                    |
+| type_accumulation | string  | 菜品编号（a-z前端使用） |
+| shop_id           | int     | 所属商家ID              |
+| description       | string  | 描述                    |
+| is_selected       | string  | 是否是默认分类          |
+
+#### 菜品表 menus
+
+| 字段名称      | 类型    | 备注               |
+| ------------- | ------- | ------------------ |
+| id            | primary | 主键               |
+| goods_name    | string  | 名称               |
+| rating        | float   | 评分               |
+| shop_id       | int     | 所属商家ID         |
+| category_id   | int     | 所属分类ID         |
+| goods_price   | float   | 价格               |
+| description   | string  | 描述               |
+| month_sales   | int     | 月销量             |
+| rating_count  | int     | 评分数量           |
+| tips          | string  | 提示信息           |
+| satisfy_count | int     | 满意度数量         |
+| satisfy_rate  | float   | 满意度评分         |
+| goods_img     | string  | 商品图片           |
+| status        | int     | 状态：1上架，0下架 |
 
 ### 实现步骤
 

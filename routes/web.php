@@ -40,6 +40,7 @@ Route::domain("admin.ele.com")->namespace("Admin")->group(function () {
     //region 店铺管理
     #店铺列表
     Route::get('shop/index', "ShopController@index")->name('admin.shop.index');
+    Route::any('shop/add/{userId}', "ShopController@add")->name('admin.shop.add');
     #删除店铺
     Route::get('shop/del/{id}', "ShopController@del")->name('admin.shop.del');
     //通过审核

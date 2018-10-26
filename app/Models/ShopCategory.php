@@ -26,4 +26,8 @@ use Illuminate\Database\Eloquent\Model;
 class ShopCategory extends Model
 {
     //
+
+    public function shops(){
+        return $this->hasMany(Shop::class,"shop_cate_id");
+    }
 }

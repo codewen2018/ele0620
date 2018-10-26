@@ -48,6 +48,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    //通过User找Shop
     public function shop(){
         return $this->hasOne(Shop::class,"user_id");
     }

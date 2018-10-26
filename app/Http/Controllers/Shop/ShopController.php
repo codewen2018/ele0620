@@ -54,8 +54,11 @@ class ShopController extends BaseController
 
             //添加成功
             session()->flash('success', '添加成功等待平台审核');
+
+            //注销
+            Auth::logout();
             //跳转至添加页面
-            return redirect()->route("shop.index.index");
+            return redirect()->route("shop.user.login");
         }
         //得到所有商家分类
         $cates = ShopCategory::where("status", 1)->get();

@@ -29,34 +29,29 @@
                         <li><a href="#">添加店铺</a></li>
                     </ul>
                 </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">用户管理 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{route('admin.user.index')}}">用户列表</a></li>
+                        <li><a href="#">添加用户</a></li>
+                    </ul>
+                </li>
             </ul>
-            <form class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
-                </div>
-                <button type="submit" class="btn btn-default">Submit</button>
-            </form>
+
             <ul class="nav navbar-nav navbar-right">
 
 
+                @auth("admin")
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
+                            <li><a href="{{route('admin.changePassword')}}">修改密码</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#">注销</a></li>
+                            <li><a href="{{route('admin.logout')}}">注销</a></li>
                         </ul>
                     </li>
-
-
-
-                        <li><a href="#">登录</a></li>
-                        <li><a href="#">注册</a></li>
-
-
-
+                @endauth
 
             </ul>
         </div><!-- /.navbar-collapse -->
