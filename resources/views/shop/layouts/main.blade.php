@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,51 +26,54 @@
     <![endif]-->
 
     <!-- Google Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+    <!--引入CSS-->
+    <link rel="stylesheet" type="text/css" href="/webuploader/webuploader.css">
+
+    {{--引用图片上传的CSS--}}
+    <link rel="stylesheet" href="/css/main.css">
+
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini fixed">
 <div class="wrapper">
 
-        @include("shop.layouts._header")
-    <!-- Left side column. contains the logo and sidebar -->
-        @include("shop.layouts._left")
-    <!-- Content Wrapper. Contains page content -->
+@include("shop.layouts._header")
+<!-- Left side column. contains the logo and sidebar -->
+@include("shop.layouts._left")
+<!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
-        {{--<section class="content-header">
-            <h1>
-                Simple Tables
-                <small>preview of simple tables</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Tables</a></li>
-                <li class="active">Simple</li>
-            </ol>
-        </section>--}}
+    {{--<section class="content-header">
+        <h1>
+            Simple Tables
+            <small>preview of simple tables</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Tables</a></li>
+            <li class="active">Simple</li>
+        </ol>
+    </section>--}}
 
-        <!-- Main content -->
+    <!-- Main content -->
         <section class="content">
 
 
-
-                    @include("shop.layouts._msg")
-                    @include("shop.layouts._error")
-                    @yield("content")
-
-
-
-
-
+            @include("shop.layouts._msg")
+            @include("shop.layouts._error")
+            @yield("content")
 
 
         </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-         @include("shop.layouts._footer")
+@include("shop.layouts._footer")
 
-    <!-- Control Sidebar -->
+<!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
@@ -279,5 +281,10 @@
 <script src="/shop/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="/shop/dist/js/demo.js"></script>
+
+<!--引入JS-->
+<script type="text/javascript" src="/webuploader/webuploader.js"></script>
+
+@yield("js")
 </body>
 </html>

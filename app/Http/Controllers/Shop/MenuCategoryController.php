@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class MenuCategoryController extends Controller
 {
@@ -80,5 +81,30 @@ class MenuCategoryController extends Controller
 
     }
 
+    public function upload(Request $request)
+    {
+        //处理上传
+
+        //dd($request->file("file"));
+
+        $file=$request->file("file");
+
+
+        if ($file){
+            //上传
+
+            $url=$file->store("menu_cate");
+
+           /// var_dump($url);
+            //得到真实地址  加 http的址
+            //$url=Storage::url($url);
+
+            $data['url']=env("ALIYUN_OSS_URL").$url;
+
+            return $data;
+            ///var_dump($url);
+        }
+
+    }
 
 }
