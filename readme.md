@@ -408,3 +408,75 @@
 ### 实现步骤
 
 ### 要点难点
+
+## Day04
+
+### 开发任务
+
+优化 
+\- 将网站图片上传到阿里云OSS对象存储服务，以减轻服务器压力(<https://github.com/jacobcyl/Aliyun-oss-storage>) 
+\- 使用webuploder图片上传插件，提升用户上传图片体验
+
+平台 
+\- 平台活动管理（活动列表可按条件筛选 未开始/进行中/已结束 的活动） 
+\- 活动内容使用ueditor内容编辑器(<https://github.com/overtrue/laravel-ueditor>)
+
+商户端 
+\- 查看平台活动（活动列表和活动详情） 
+\- 活动列表不显示已结束的活动
+
+### 数据表设计
+
+#### 活动表
+
+| 字段名称   | 类型     | 备注         |
+| ---------- | -------- | ------------ |
+| id         | primary  | 主键         |
+| title      | string   | 活动名称     |
+| content    | text     | 活动详情     |
+| start_time | datetime | 活动开始时间 |
+| end_time   | datetime | 活动结束时间 |
+
+# 实现步骤
+
+## 阿里云OSS
+
+1. 登录阿里云网站
+
+2. 开通oss(实名认证之后申请半年免费)
+
+3. 进入控制器 OSS操作面板
+
+4. 新建 bucket   取名   域名   标准存储  公共读
+
+5. 执行 命令 安装 ali-oss插件
+
+   ```sh
+   composer require jacobcyl/ali-oss-storage -vvv
+   ```
+
+6. 修改 app/filesystems.php  添加如何代码
+
+   ```php
+   <?php
+   
+   return [
+   
+       ...此处省略N个代码
+       'disks' => [
+   
+         
+           'oss' => [
+                   'driver'        => 'oss',
+                   'access_id'     => 'LTAI8lXAo9nl2dn1',//账号
+                   'access_key'    => 'hhSp1VESrBp7vruWjOKFIVSOe2Ugyb',//密钥
+                   'bucket'        => 'ele0620',//空间名称
+                   'endpoint'      => 'oss-cn-shenzhen.aliyuncs.com', // OSS 外网节点或自定义外部域名
+   
+       ],
+      
+       ],
+   
+   ];
+   
+   ```

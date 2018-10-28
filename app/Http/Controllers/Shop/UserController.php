@@ -46,8 +46,6 @@ class UserController extends BaseController
 
     public function login(Request $request)
     {
-
-
         //判断是否POST提交
         if ($request->isMethod("post")) {
             //验证
@@ -80,7 +78,7 @@ class UserController extends BaseController
                 } else {
                     //跳转到申请店铺
 
-                    return redirect()->route("shop.shop.add")->with("danger","还未申请店铺");
+                    return redirect()->route("shop.shop.add")->with("danger", "还未申请店铺");
 
                 }
                 // session()->flash("success","登录成功");

@@ -66,10 +66,21 @@ Route::domain("shop.ele.com")->namespace("Shop")->group(function () {
     Route::any("user/reg", "UserController@reg")->name("shop.user.reg");
     Route::any("user/login", "UserController@login")->name("shop.user.login");
     //endregion
-
     //region 店铺管理
     Route::any("shop/add", "ShopController@add")->name("shop.shop.add");
-
     //endregion
+    //endregion
+    //region 菜品分类
+    Route::get("menu_cate/index", "MenuCategoryController@index")->name('menu_cate.index');
+    Route::any("menu_cate/add", "MenuCategoryController@add")->name('menu_cate.add');
+    Route::any("menu_cate/edit/{id}", "MenuCategoryController@edit")->name('menu_cate.edit');
+    Route::get("menu_cate/del/{id}", "MenuCategoryController@del")->name('menu_cate.del');
+//endregion
+    //region 菜品管理
+    Route::get("menu/index", "MenuController@index")->name('menu.index');
+    Route::any("menu/add", "MenuController@add")->name('menu.add');
+    Route::any("menu/edit/{id}", "MenuController@edit")->name('menu.edit');
+    Route::get("menu/del/{id}", "MenuController@del")->name('menu.del');
+//endregion
 
 });
