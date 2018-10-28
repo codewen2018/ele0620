@@ -449,13 +449,15 @@
 
 4. 新建 bucket   取名   域名   标准存储  公共读
 
-5. 执行 命令 安装 ali-oss插件
+5. 点击用户图像---》accesskeys--->继续使用accsskeys--->添加accesskeys--->拿到access_id和access_key
+
+6. 执行 命令 安装 ali-oss插件
 
    ```sh
    composer require jacobcyl/ali-oss-storage -vvv
    ```
 
-6. 修改 app/filesystems.php  添加如何代码
+7. 修改 app/filesystems.php  添加如何代码
 
    ```php
    <?php
@@ -478,5 +480,21 @@
        ],
    
    ];
-   
+   ```
+
+8. 修改 .env配置文件  设置文件上传驱动为oss
+
+   ```php
+   FILESYSTEM_DRIVER=oss
+   ALIYUN_OSS_URL=http://ele0620.oss-cn-shenzhen.aliyuncs.com/    
+   ALIYUNU_ACCESS_ID=LTAI8lXAo9nl2dn1
+   ALIYUNU_ACCESS_KEY=hhSp1VESrBp7vruWjOKFIVSOe2Ugyb
+   ALIYUNU_OSS_BUCKET=ele0620
+   ALIYUNU_OSS_ENDPOINT=oss-cn-shenzhen.aliyuncs.com
+   ```
+
+9. 获取图片 及 缩略图
+
+   ```php
+    <td><img src="{{env("ALIYUN_OSS_URL").$menu->goods_img}}?x-oss-process=image/resize,m_fill,w_80,h_80"></td>
    ```
