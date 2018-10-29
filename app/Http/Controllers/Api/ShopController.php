@@ -69,7 +69,11 @@ class ShopController extends Controller
         //当前分类有哪些商品
         foreach ($cates as $k=>$cate){
 
-            $cates[$k]->goods_list=$cate->goodsList;
+            $goods=$cate->goodsList;
+            foreach ($goods as $k=>$good){
+                $goods[$k]->goods_img=env("ALIYUN_OSS_URL").$good->goods_img;
+            }
+            $cates[$k]->goods_list=$goods;
 
         }
 

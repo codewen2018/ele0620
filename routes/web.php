@@ -17,7 +17,6 @@ Route::get('/', function () {
 
 
 Route::domain("admin.ele.com")->namespace("Admin")->group(function () {
-
     //region 后台用户
     #后台用户登录
     Route::any('admin/login', "AdminController@login")->name('admin.login');
@@ -50,19 +49,14 @@ Route::domain("admin.ele.com")->namespace("Admin")->group(function () {
     //商家用户管理
     Route::get('user/index', "UserController@index")->name('admin.user.index');
     //endregion
-
     //region 活动管理
     Route::get('activity/index', "ActivityController@index")->name('admin.activity.index');
     Route::any('activity/add', "ActivityController@add")->name('admin.activity.add');
     //endregion
-
-
 });
 
 
 Route::domain("shop.ele.com")->namespace("Shop")->group(function () {
-
-
     //region 商户首页
     Route::get("index/index", "IndexController@index")->name("shop.index.index");
     //endregion
@@ -73,7 +67,6 @@ Route::domain("shop.ele.com")->namespace("Shop")->group(function () {
     //endregion
     //region 店铺管理
     Route::any("shop/add", "ShopController@add")->name("shop.shop.add");
-    //endregion
     //endregion
     //region 菜品分类
     Route::get("menu_cate/index", "MenuCategoryController@index")->name('menu_cate.index');
@@ -90,5 +83,4 @@ Route::domain("shop.ele.com")->namespace("Shop")->group(function () {
     Route::get("menu/del/{id}", "MenuController@del")->name('menu.del');
     Route::any("menu/upload", "MenuController@upload")->name('menu.upload');
 //endregion
-
 });
