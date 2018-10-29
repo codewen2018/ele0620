@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -25,11 +26,11 @@ class AdminController extends BaseController
         if ($request->isMethod("post")) {
 
             //验证
-           $data= $this->validate($request, [
+            $data = $this->validate($request, [
                 'name' => "required",
                 'password' => "required"
             ]);
-           // $data=$request->post();
+            // $data=$request->post();
             //验证账号密码
             if (Auth::guard("admin")->attempt($data)) {
                 // session()->flash("success","登录成功");
@@ -98,25 +99,63 @@ class AdminController extends BaseController
      */
     public function add(Request $request)
     {
-        if ($request->isMethod('post')){
+        if ($request->isMethod('post')) {
 
 
             // dd($request->post('per'));
             //接收参数
-            $data=$request->post();
-            $data['password']=bcrypt($data['password']);
+            $data = $request->post();
+            $data['password'] = bcrypt($data['password']);
 
 
             //创建用户
-            $admin=Admin::create($data);
-
+            $admin = Admin::create($data);
 
 
             //通过用户找出所有角色
-           // $admin->roles();
+            // $admin->roles();
 
             //跳转并提示
-            return redirect()->route('admin.index')->with('success','创建'.$admin->name."成功");
+            return redirect()->route('admin.index')->with('success', '创建' . $admin->name . "成功");
+
+
+        }
+
+        return view('admin.admin.add');
+    }
+
+    /**
+     * 添加用户
+     */
+    public function edit(Request $request, $id)
+    {
+        if ($request->isMethod('post')) {
+
+
+            $this->validate($request, [
+                //'name'=>"required|unique:users",
+                'name' => [
+                    'required',
+                    //编辑时唯一性验证
+                    Rule::unique("admins")->ignore($id)
+                ],
+                'password' => "required"
+            ]);
+            // dd($request->post('per'));
+            //接收参数
+            $data = $request->post();
+            $data['password'] = bcrypt($data['password']);
+
+
+            //创建用户
+            $admin = Admin::create($data);
+
+
+            //通过用户找出所有角色
+            // $admin->roles();
+
+            //跳转并提示
+            return redirect()->route('admin.index')->with('success', '创建' . $admin->name . "成功");
 
 
         }

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 
@@ -49,6 +49,11 @@ Route::domain("admin.ele.com")->namespace("Admin")->group(function () {
     //region 商家用户
     //商家用户管理
     Route::get('user/index', "UserController@index")->name('admin.user.index');
+    //endregion
+
+    //region 活动管理
+    Route::get('activity/index', "ActivityController@index")->name('admin.activity.index');
+    Route::any('activity/add', "ActivityController@add")->name('admin.activity.add');
     //endregion
 
 

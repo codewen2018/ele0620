@@ -26,6 +26,7 @@
                             <th>名称</th>
                             <th>描述</th>
                             <th>默认</th>
+                            <th>LOGO</th>
                             <th>操作</th>
                         </tr>
                         @foreach($cates as $cate)
@@ -34,6 +35,7 @@
                                 <td>{{$cate->name}}</td>
                                 <td>{{$cate->description}}</td>
                                 <td>{{$cate->is_selected}}</td>
+                                <td><img src="{{env('ALIYUN_OSS_URL').$cate->logo}}" alt=""></td>
                                 <td>
                                     <a href="{{route('menu_cate.edit',$cate->id)}}" class="btn btn-info">编辑</a>
                                     <a href="{{route('menu_cate.del',$cate->id)}}" class="btn btn-danger">删除</a>

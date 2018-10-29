@@ -96,10 +96,10 @@ class MenuCategoryController extends Controller
             $url=$file->store("menu_cate");
 
            /// var_dump($url);
-            //得到真实地址  加 http的址
+            //得到真实地址
             //$url=Storage::url($url);
 
-            $data['url']=env("ALIYUN_OSS_URL").$url;
+            $data['url']=$url;
 
             return $data;
             ///var_dump($url);

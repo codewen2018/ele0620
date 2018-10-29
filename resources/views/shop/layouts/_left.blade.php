@@ -18,7 +18,7 @@
             <li><a href="/shop/add"><i class="fa fa-book"></i> <span>申请店铺</span></a></li>
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                    <i class="fa fa-address-book-o"></i> <span>Dashboard</span>
                     <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
