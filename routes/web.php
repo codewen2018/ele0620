@@ -14,6 +14,11 @@
 Route::get('/', function () {
     return view('index');
 });
+Route::get("test",function (){
+
+    return \Illuminate\Support\Facades\Cache::get("tel_");
+
+});
 
 
 Route::domain("admin.ele.com")->namespace("Admin")->group(function () {

@@ -10,7 +10,7 @@ class MenuCategory extends Model
     public $fillable = ['name', 'type_accumulation', 'shop_id', 'description', 'is_selected','logo'];
 
     //通过分类找菜品goods_list=====>goodsList
-    public function goodsList(){
+    public function menus(){
 
       return $this->hasMany(Menu::class,"cate_id");
 
