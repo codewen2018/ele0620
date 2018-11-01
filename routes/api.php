@@ -21,3 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get("shop/index","Api\ShopController@index");
 Route::get("shop/detail","Api\ShopController@detail");
 Route::get("member/sms","Api\MemberController@sms");
+Route::post("member/login","Api\MemberController@login");
+Route::post("member/reg","Api\MemberController@reg");
+Route::get("member/detail","Api\MemberController@detail");
