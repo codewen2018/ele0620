@@ -140,7 +140,7 @@ class OrderController extends Controller
         $order = Order::find($request->input('id'));
 
         $data['id'] = $order->id;
-        $data['order_code'] = $order->sn;
+        $data['order_code'] = $order->order_code;
         $data['order_birth_time'] = (string)$order->created_at;
         $data['order_status'] = $order->order_status;
         $data['shop_id'] = $order->shop_id;
@@ -170,7 +170,7 @@ class OrderController extends Controller
         $datas=[];
         foreach ($orders as $order) {
             $data['id'] = $order->id;
-            $data['order_code'] = $order->sn;
+            $data['order_code'] = $order->order_code;
             $data['order_birth_time'] = (string)$order->created_at;
             $data['order_status'] = $order->order_status;
             $data['shop_id'] = (string)$order->shop_id;
@@ -186,4 +186,40 @@ class OrderController extends Controller
 
         return $datas;
     }
+
+
+    /**
+     * 订单支付
+     */
+    public function pay(Request $request)
+    {
+        // 得到订单
+        $order = Order::find($request->post('id'));
+
+        //得到用户
+        $member = Member::find($order->user_id);
+
+        //判断钱够不够
+        if ($order->total > $member->money) {
+
+            return [
+                'status' => 'false',
+                "message" => "用户余额不够，请充值"
+            ];
+        }
+
+        //否则扣钱
+        $member->money = $member->money - $order->total;
+        $member->save();
+
+        //更改订单状态
+        $order->status = 1;
+        $order->save();
+
+        return [
+            'status' => 'true',
+            "message" => "支付成功"
+        ];
+    }
+
 }

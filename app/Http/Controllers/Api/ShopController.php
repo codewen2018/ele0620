@@ -22,7 +22,7 @@ class ShopController extends Controller
         foreach ($shops as $k => $v) {
 
             //$shops[$k]->shop_img=Storage::url($v->shop_img);
-            $shops[$k]->shop_img = env("ALIYUN_OSS_URL") . $v->shop_img;
+         //   $shops[$k]->shop_img = env("ALIYUN_OSS_URL") . $v->shop_img;
             $shops[$k]->distance = rand(1000, 5000);
             $shops[$k]->estimate_time = ceil($shops[$k]['distance'] / rand(100, 150));
 

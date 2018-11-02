@@ -39,6 +39,8 @@ Route::namespace("Api")->group(function (){
 //订单
     Route::post("order/add","OrderController@add");
     Route::get("order/detail","OrderController@detail");
+    Route::post("order/pay","OrderController@pay");
+    Route::get("order/index","OrderController@index");
 
 
 });

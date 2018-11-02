@@ -55,6 +55,11 @@ class Shop extends Model
     protected $fillable = ['shop_name', 'shop_img', 'shop_rating', 'brand', 'on_time',
         'fengniao', 'bao', 'piao', 'zhun', 'start_send', 'send_cost', 'notice', 'discount', 'shop_cate_id','status','user_id'];
 
+    public function getShopImgAttribute($value)
+    {
+        return env("ALIYUN_OSS_URL").$value;
+    }
+
     public function cate()
     {
         return $this->belongsTo(ShopCategory::class,"shop_cate_id");
