@@ -10,11 +10,11 @@ window.api = {
   // 忘记密码接口
   forgetPassword: '/forgetPassword.php',
   // 地址列表接口
-  addressList: '/addressList.php',
+  addressList: '/api/address/index',
   // 指定地址接口
   address: '/address.php',
   // 保存新增地址接口
-  addAddress: '/addAddress.php',
+  addAddress: '/api/address/add',
   // 保存修改地址接口
   editAddress: '/editAddress.php',
   // 获得订单列表接口
@@ -26,11 +26,11 @@ window.api = {
   // 获得指定商家接口
   business: '/api/shop/detail',
   // 保存购物车接口
-  addCart: '/addCart.php',
+  addCart: '/api/cart/add',
   // 获取购物车数据接口
-  cart: '/cart.php',
+  cart: '/api/cart/index',
   // 添加订单接口
-  addOrder: '/addorder.php',
+  addOrder: '/api/order/add',
   // 支付接口
   pay: '/pay.php',
   // 用户详情接口

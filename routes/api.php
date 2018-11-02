@@ -13,14 +13,32 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});*/
+
+Route::namespace("Api")->group(function (){
+
+
+    Route::get("shop/index","ShopController@index");
+    Route::get("shop/detail","ShopController@detail");
+
+    Route::get("member/sms","MemberController@sms");
+    Route::post("member/login","MemberController@login");
+    Route::post("member/reg","MemberController@reg");
+    Route::get("member/detail","MemberController@detail");
+
+//地址管理
+    Route::post("address/add","AddressController@add");
+    Route::get("address/index","AddressController@index");
+
+//购物车
+    Route::post("cart/add","CartController@add");
+    Route::get("cart/index","CartController@index");
+
+//订单
+    Route::post("order/add","OrderController@add");
+    Route::get("order/detail","OrderController@detail");
+
+
 });
-
-
-Route::get("shop/index","Api\ShopController@index");
-Route::get("shop/detail","Api\ShopController@detail");
-Route::get("member/sms","Api\MemberController@sms");
-Route::post("member/login","Api\MemberController@login");
-Route::post("member/reg","Api\MemberController@reg");
-Route::get("member/detail","Api\MemberController@detail");

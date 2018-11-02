@@ -880,16 +880,95 @@
 
 
 
-
-
 # Day07
 
-开发任务
+## 开发任务
 
 接口开发 
 
 - 用户地址管理相关接口 
 - 购物车相关接口
 
-### 实现步骤
+## 数据表设计
+
+
+
+#### 用户地址表addresses
+
+| 字段名称   | 类型    | 备注           |
+| ---------- | ------- | -------------- |
+| id         | primary | 主键           |
+| user_id    | int     | 用户id         |
+| province   | string  | 省             |
+| city       | string  | 市             |
+| county     | string  | 县             |
+| address    | string  | 详细地址       |
+| tel        | string  | 收货人电话     |
+| name       | string  | 收货人姓名     |
+| is_default | int     | 是否是默认地址 |
+
+
+
+#### 购物车表carts
+
+| 字段名称 | 类型    | 备注     |
+| -------- | ------- | -------- |
+| id       | primary | 主键     |
+| user_id  | int     | 用户id   |
+| goods_id | int     | 商品id   |
+| amount   | int     | 商品数量 |
+
+## 实现步骤
+
+
+
+# Day08
+
+## 开发任务
+
+接口开发 
+
+- 订单接口(使用事务保证订单和订单商品表同时写入成功) 
+- 密码修改和重置密码接口
+
+
+
+## 数据表设计
+
+
+
+#### 订单表orders
+
+| 字段名称   | 类型     | 备注                                              |
+| ---------- | -------- | ------------------------------------------------- |
+| id         | primary  | 主键                                              |
+| user_id    | int      | 用户ID                                            |
+| shop_id    | int      | 商家ID                                            |
+| order_code | string   | 订单编号                                          |
+| province   | string   | 省                                                |
+| city       | string   | 市                                                |
+| county     | string   | 县                                                |
+| address    | string   | 详细地址                                          |
+| tel        | string   | 收货人电话                                        |
+| name       | string   | 收货人姓名                                        |
+| total      | decimal  | 价格                                              |
+| status     | int      | 状态(-1:已取消,0:待支付,1:待发货,2:待确认,3:完成) |
+| created_at | datetime | 创建时间                                          |
+|            |          |                                                   |
+
+#### 订单商品表order_details
+
+| 字段名称    | 类型    | 备注     |
+| ----------- | ------- | -------- |
+| id          | primary | 主键     |
+| order_id    | int     | 订单id   |
+| goods_id    | int     | 商品id   |
+| amount      | int     | 商品数量 |
+| goods_name  | string  | 商品名称 |
+| goods_img   | string  | 商品图片 |
+| goods_price | decimal | 商品价格 |
+
+## 实现步骤
+
+
 
