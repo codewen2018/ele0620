@@ -139,10 +139,13 @@ class OrderController extends Controller
 
         $order = Order::find($request->input('id'));
 
+
+        //$arr = [-1 => "已取消", 0 => "代付款", 1 => "待发货", 2 => "待确认", 3 => "完成"];
         $data['id'] = $order->id;
         $data['order_code'] = $order->order_code;
         $data['order_birth_time'] = (string)$order->created_at;
         $data['order_status'] = $order->order_status;
+      //  $data['order_status'] = $arr[$order->status];
         $data['shop_id'] = $order->shop_id;
         $data['shop_name'] = $order->shop->shop_name;
         $data['shop_img'] = $order->shop->shop_img;
@@ -208,13 +211,15 @@ class OrderController extends Controller
             ];
         }
 
-        //否则扣钱
-        $member->money = $member->money - $order->total;
-        $member->save();
+      DB::transaction(function () use ($member,$order){
+          //否则扣钱
+          $member->money = $member->money - $order->total;
+          $member->save();
 
-        //更改订单状态
-        $order->status = 1;
-        $order->save();
+          //更改订单状态
+          $order->status = 1;
+          $order->save();
+      });
 
         return [
             'status' => 'true',

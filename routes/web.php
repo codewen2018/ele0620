@@ -88,4 +88,9 @@ Route::domain("shop.ele.com")->namespace("Shop")->group(function () {
     Route::get("menu/del/{id}", "MenuController@del")->name('menu.del');
     Route::any("menu/upload", "MenuController@upload")->name('menu.upload');
 //endregion
+
+    //region 订单管理
+    Route::get("order/day", "OrderController@day")->name('shop.order.day');
+    Route::get("order/menu", "OrderController@menu")->name('shop.order.menu');
+//endregion
 });
