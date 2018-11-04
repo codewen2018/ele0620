@@ -84,4 +84,23 @@ class OrderController extends BaseController
 
     }
 
+    public function menu(Request $request){
+
+        //默认显示当前的菜品销量
+        $date=$request->day??date("Y-m-d",time());
+        //$shopId=$request->shop_id;
+        //登录用户
+        //先找到店铺ID
+        $shopId=Auth::user()->shop->id;
+        //再通过店铺ID把属于这个店的所有订单id 都找出来
+        $orderIds=Order::where("shop_id",$shopId)->whereDate('created_at', '2018-11-04')->pluck("id")->toArray();
+
+        //商品
+
+     $goods=   OrderGood::select(DB::raw("goods_id,goods_name,sum(amount) as nums"))->whereIn("order_id",$orderIds)->groupBy("goods_id")->get();
+     dd($goods->toArray());
+       // dd($orderIds->toArray());
+
+
+    }
 }

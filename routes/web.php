@@ -157,9 +157,12 @@ Route::domain(env("SHOP_URL"))->namespace("Shop")->group(function () {
     Route::get('order/index', "OrderController@index")->name('order.index');
     Route::get('order/changeStatus/{id}/{status}', "OrderController@changeStatus")->name('order.changeStatus');
     Route::get('order/detail/{id}', "OrderController@detail")->name('order.detail');
+    Route::get('order/menu', "OrderController@menu")->name('order.menu');
+
 //endregion
     //region 抽奖
     Route::get('event/index', "EventController@index")->name('event.index');
     Route::get('event/sign', "EventController@sign")->name('event.sign');
+
 //endregion
 });

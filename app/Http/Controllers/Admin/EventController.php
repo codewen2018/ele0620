@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Event;
 use App\Models\EventPrize;
+use App\Models\EventUser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -36,8 +37,8 @@ class EventController extends Controller
 
             $event=Event::create($data);
 
-            //1.把活动人数添加到redis中
-            //Redis::set("event_num:".$event->id,$event->num);
+            //1.把活动人数添加到redis中 event_num:2====>30
+           Redis::set("event_num:".$event->id,$event->num);
 
             return redirect()->route('admin.event.index')->with("添加活动成功");
 
@@ -47,15 +48,35 @@ class EventController extends Controller
     }
     //活动开奖
     public function open(Request $request,$id){
+
+        //开奖把数据从redis同步过来
+        $users=Redis::smembers("event:".$id);
+
+        foreach ($users as $user){
+            EventUser::insert([
+                "event_id"=>$id,
+                "user_id"=>$user
+            ]);
+        }
+        //dd($users);
+
+
+
         //1.通过当前活动ID把已经报名的用户ID取出来
-        $userIds=DB::table('event_users')->where('event_id',$id)->pluck('user_id')->toArray();
+      //  $userIds=DB::table('event_users')->where('event_id',$id)->pluck('user_id')->toArray();
+        $userIds=EventUser::where("event_id",$id)->pluck("user_id")->shuffle();
+        //dd($userIds);
+
+
 
         //2.打乱$userIds
-       shuffle($userIds);
+      // shuffle($userIds);
 
+       // dd($userIds);
        //3.找出当前活动的奖品 并随机打乱
         $prizes=EventPrize::where("event_id",$id)->get()->shuffle();
 
+      //  dd($prizes->toArray());
         //4.操作奖品表
         foreach ($prizes as $k=>$prize){
 

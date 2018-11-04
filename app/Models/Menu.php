@@ -40,6 +40,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Menu whereTips($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Menu whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int|null $stock 库存
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Menu whereStock($value)
  */
 class Menu extends Model
 {
