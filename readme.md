@@ -995,3 +995,227 @@
 ### 实现步骤
 
 ### 要点难点
+
+
+
+# Day10
+
+### 开发任务
+
+平台 
+
+- 权限管理 
+- 角色管理[添加角色时,给角色关联权限] 
+- 管理员管理[添加和修改管理员时,修改管理员的角色]
+
+
+
+
+
+### 实现步骤
+
+1. 安装 composer require spatie/laravel-permission -vvv
+
+2. 生成数据迁移 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="migrations"
+
+   > 给权限表可以加个 intro 字段
+
+3. 执行数据迁移  php artisan migrate
+
+4. 生成配置文件 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="config"
+
+5. Admin模型中
+
+   ```php
+   class Admin extends Authenticatable
+   {
+       use HasRoles;
+       protected $guard_name = 'admin'; // 使用任何你想要的守卫
+       protected $fillable=['name','password','email'];
+   }
+   
+   ```
+
+6. 添加权限
+
+   ```php
+       public function add(Request $request)
+       {
+   
+           if ($request->isMethod("post")){
+   
+   
+               $data=$request->post();
+               $data['guard_name']="admin";
+               Permission::create($data);
+   
+   
+           }
+           return view("admin.per.add");
+   
+   
+       }
+   ```
+
+7. 添加角色
+
+   ```php
+    //
+       public function add(Request $request)
+       {
+   
+           if ($request->isMethod("post")){
+   
+               //1.接收参数 并处理数据
+              $pers=$request->post('pers');
+               //2.添加角色
+               $role=Role::create([
+                   "name"=>$request->post("name"),
+                   "guard_name"=>"admin"
+               ]);
+               //3. 给角色同步权限
+               if ($pers){
+                   $role->syncPermissions($pers);
+               }
+   
+   
+   
+   
+   
+   
+           }
+   
+   
+           //得到所有权限
+           $pers = Permission::all();
+   
+   
+           return view("admin.role.add",compact("pers"));
+   
+       }
+   ```
+
+8. 给用户指定角色
+
+   ```php
+    /**
+        * 添加用户
+        */
+       public function add(Request $request)
+       {
+           if ($request->isMethod('post')) {
+   
+   
+               // dd($request->post('per'));
+               //接收参数
+               $data = $request->post();
+               $data['password'] = bcrypt($data['password']);
+   
+   
+               //创建用户
+               $admin = Admin::create($data);
+   
+               //给用户添加角色 同步角色
+               $admin->syncRoles($request->post('role'));
+   
+               //通过用户找出所有角色
+               // $admin->roles();
+   
+               //跳转并提示
+               return redirect()->route('admin.index')->with('success', '创建' . $admin->name . "成功");
+   
+   
+           }
+   
+           //得到所有角色
+           $roles=Role::all();
+           return view('admin.admin.add',compact("roles"));
+       }
+   ```
+
+9. 判断权限 在E:\web\ele\app\Http\Controllers\Admin\BaseController.php 添加如下代码
+
+   ```php
+   <?php
+   
+   namespace App\Http\Controllers\Admin;
+   
+   use App\Models\Admin;
+   use Illuminate\Http\Request;
+   use App\Http\Controllers\Controller;
+   use Illuminate\Support\Facades\Auth;
+   use Illuminate\Support\Facades\Route;
+   
+   class BaseController extends Controller
+   {
+       public function __construct()
+       {
+           //1.添加中间件 auth:admin
+           $this->middleware("auth:admin")->except(["login"]);
+   
+           //2. 有没有权限
+   
+           $this->middleware(function ($request, \Closure $next){
+   
+               //如果没有权限  停在这里
+               //1. 得到当前访问地址的路由
+               $route=Route::currentRouteName();
+   
+               //2.设置一个白名单
+               $allow=[
+                   "admin.login",
+                   "admin.logout"
+               ];
+               //2.判断当前登录用户有没有权限
+             /*  if (!in_array($route,$allow)){
+   
+                   if (!Auth::guard("admin")->user()->can($route)){
+                       if (Auth::guard("admin")->id()!=1){
+                           exit(view("admin.fuck"));
+                       }
+                   }
+   
+   
+               }*/
+   
+   
+   
+             //要保证在白名单 并且 有权限 而且 Id==1
+               if (!in_array($route,$allow) &&!Auth::guard("admin")->user()->can($route) && Auth::guard("admin")->id()!=1){
+   
+               /*  echo view("admin.fuck");
+                 exit;*/
+                   exit(view("admin.fuck"));
+               }
+   
+             return $next($request);
+   
+           });
+   
+       }
+   
+   }
+   ```
+
+10. 创建admin.fuck视图
+
+    ```php
+     @extends("layouts.admin.default")
+    
+      @section("content")
+         没有权限
+      @endsection
+    ```
+
+11. 其它方法
+
+    ```php
+       //判断当前角色有没有当前权限
+       $role->hasPermissionTo('edit articles');
+       //判断当前用户有没有权限
+       $admin->hasRole('角色名')
+       //取出当前角色所拥有的所有权限
+       $role->permissions();
+       //取出当前用户所拥有的角色
+       $roles = $admin->getRoleNames(); // 返回一个集合
+    ```

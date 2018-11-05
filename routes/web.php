@@ -14,7 +14,7 @@
 Route::get('/', function () {
     return view('index');
 });
-Route::get("test",function (){
+Route::get("test", function () {
 
     return \Illuminate\Support\Facades\Cache::get("tel_");
 
@@ -58,6 +58,18 @@ Route::domain("admin.ele.com")->namespace("Admin")->group(function () {
     Route::get('activity/index', "ActivityController@index")->name('admin.activity.index');
     Route::any('activity/add', "ActivityController@add")->name('admin.activity.add');
     //endregion
+
+    //region 权限管理
+    Route::get('per/index', "PerController@index")->name('per.index');
+    Route::any('per/add', "PerController@add")->name('per.add');
+
+    //endregion
+
+    //region 角色管理
+    Route::get('role/index', "RoleController@index")->name('role.index');
+    Route::any('role/add', "RoleController@add")->name('role.add');
+
+    //endregion
 });
 
 
@@ -89,8 +101,12 @@ Route::domain("shop.ele.com")->namespace("Shop")->group(function () {
     Route::any("menu/upload", "MenuController@upload")->name('menu.upload');
 //endregion
 
-    //region 订单管理
-    Route::get("order/day", "OrderController@day")->name('shop.order.day');
-    Route::get("order/menu", "OrderController@menu")->name('shop.order.menu');
+
+    //region 订单统计
+    Route::get('order/day', "OrderController@day")->name('order.day');
+    Route::get('order/index', "OrderController@index")->name('order.index');
+    Route::get('order/changeStatus/{id}/{status}', "OrderController@changeStatus")->name('order.changeStatus');
+    Route::get('order/detail/{id}', "OrderController@detail")->name('order.detail');
 //endregion
+
 });

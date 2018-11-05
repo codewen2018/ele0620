@@ -11,23 +11,10 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">密码</label>
+            <label class="col-sm-2 control-label">权限</label>
             <div class="col-sm-10">
-                <input type="text" name="password" class="form-control">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Email</label>
-            <div class="col-sm-10">
-                <input type="text" name="email" class="form-control">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label">角色</label>
-            <div class="col-sm-10">
-                @foreach($roles as $role)
-                <input type="checkbox" name="role[]" value="{{$role->id}}">{{$role->name}}
+                @foreach($pers as $per)
+                    <input type="checkbox" name="per[]" value="{{$per->id}}">{{$per->intro}}
                 @endforeach
             </div>
         </div>

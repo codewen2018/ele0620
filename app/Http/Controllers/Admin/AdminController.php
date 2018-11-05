@@ -111,6 +111,8 @@ class AdminController extends BaseController
             //创建用户
             $admin = Admin::create($data);
 
+            //给用户添加角色 同步角色
+            $admin->syncRoles($request->post('role'));
 
             //通过用户找出所有角色
             // $admin->roles();
@@ -121,7 +123,9 @@ class AdminController extends BaseController
 
         }
 
-        return view('admin.admin.add');
+        //得到所有角色
+        $roles=Role::all();
+        return view('admin.admin.add',compact("roles"));
     }
 
     /**
