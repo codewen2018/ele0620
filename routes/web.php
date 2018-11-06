@@ -11,12 +11,25 @@
 |
 */
 
+
 Route::get('/', function () {
     return view('index');
 });
 Route::get("test", function () {
 
-    return \Illuminate\Support\Facades\Cache::get("tel_");
+
+    //$content = 'test';//邮件内容
+    $shopName="互联网学院";
+    $to = 'wjx@itsource.cn';//收件人
+    $subject = $shopName.' 审核通知';//邮件标题
+    \Illuminate\Support\Facades\Mail::send(
+        'emails.shop',
+       compact("shopName"),
+        function ($message) use($to, $subject) {
+            $message->to($to)->subject($subject);
+        }
+    );
+
 
 });
 
@@ -39,6 +52,7 @@ Route::domain("admin.ele.com")->namespace("Admin")->group(function () {
     //region 店铺分类
     //店铺分类 App\Http\Controllers\Admin
     Route::get('shop_category/index', "ShopCategoryController@index")->name('shop_cate.index');
+    Route::any('shop_category/add', "ShopCategoryController@add")->name('shop_cate.add');
     Route::get('shop_category/del/{id}', "ShopCategoryController@del")->name('shop_cate.del');
     //endregion
     //region 店铺管理
@@ -68,6 +82,8 @@ Route::domain("admin.ele.com")->namespace("Admin")->group(function () {
     //region 角色管理
     Route::get('role/index', "RoleController@index")->name('role.index');
     Route::any('role/add', "RoleController@add")->name('role.add');
+    Route::any('role/edit/{id}', "RoleController@edit")->name('role.edit');
+    Route::get('role/del/{id}', "RoleController@del")->name('role.del');
 
     //endregion
 });

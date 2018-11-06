@@ -1219,3 +1219,87 @@
        //取出当前用户所拥有的角色
        $roles = $admin->getRoleNames(); // 返回一个集合
     ```
+
+# Day11
+
+### 开发任务
+
+#### 平台 
+
+- 导航菜单管理 
+- 根据权限显示菜单 
+- 配置RBAC权限管理 
+
+#### 商家 
+
+- 发送邮件(商家审核通过,以及有订单产生时,给商家发送邮件提醒) 
+  用户 
+- 下单成功时,给用户发送手机短信提醒
+
+
+
+### 实现步骤
+
+##### 邮件发送
+
+1. 配置.env
+
+   ```ini
+   MAIL_DRIVER=smtp
+   MAIL_HOST=smtp.qq.com
+   MAIL_PORT=465
+   MAIL_USERNAME=你的邮箱
+   MAIL_PASSWORD=你的授权码
+   MAIL_ENCRYPTION=ssl
+   MAIL_FROM_ADDRESS=你的邮箱
+   MAIL_FROM_NAME=发件人名称
+   ```
+
+   >端口465是使用了ssl；
+   >
+   >MAIL_ENCRYPTION不填的话，端口是25；
+   >
+   >注意MAIL_PASSWORD是授权密码，不是登录密码！
+
+2. 发送邮件
+
+   ```php
+   Route::get("test", function () {
+   
+   
+       //$content = 'test';//邮件内容
+       $shopName="互联网学院";
+       $to = 'wjx@itsource.cn';//收件人
+       $subject = $shopName.' 审核通知';//邮件标题
+       \Illuminate\Support\Facades\Mail::send(
+           'emails.shop',//视图
+          compact("shopName"),//传递给视图的参数
+           function ($message) use($to, $subject) {
+               $message->to($to)->subject($subject);
+           }
+       );
+   
+   
+   });
+   ```
+
+3. 创建对应的视图 resources/views/emails/shop.blade.php
+
+   ```php
+   <p>
+       你的店铺：{{$shopName}} 已通过审核，请查看
+   </p>
+   ```
+
+
+### 数据表设计
+
+#### 导航菜单表 navs
+
+| 字段名称 | 类型    | 备注       |
+| -------- | ------- | ---------- |
+| id       | primary | 主键       |
+| name     | string  | 名称       |
+| url      | string  | 地址       |
+| sort     | int     | 排序       |
+| pid      | int     | 上级菜单id |

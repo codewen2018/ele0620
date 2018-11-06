@@ -23,6 +23,7 @@ class BaseController extends Controller
             //1. 得到当前访问地址的路由
             $route=Route::currentRouteName();
 
+
             //2.设置一个白名单
             $allow=[
                 "admin.login",

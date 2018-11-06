@@ -4,20 +4,18 @@
     <form class="form-horizontal" action="" method="post">
         {{csrf_field()}}
         <div class="form-group">
-            <label class="col-sm-2 control-label">名称</label>
+            <label class="col-sm-2 control-label">角色名称</label>
             <div class="col-sm-10">
-                <select name="name" class="form-control">
-                    @foreach($urls as $url)
-                        <option value="{{$url}}">{{$url}}</option>
-                    @endforeach
-                </select>
+                <input type="text" name="name" class="form-control" value="{{old('name',$role->name)}}">
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">描述</label>
+            <label class="col-sm-2 control-label">权限名称</label>
             <div class="col-sm-10">
-                <input type="text" name="intro" class="form-control">
+                @foreach($pers as $per)
+                <input type="checkbox" name="per[]" value="{{$per->name}}" @if($role->hasPermissionTo($per->name)) checked @endif>{{$per->intro}}
+                @endforeach
             </div>
         </div>
         <div class="form-group">
