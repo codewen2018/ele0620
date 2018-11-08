@@ -71,6 +71,6 @@ class EventController extends Controller
 
         //6.返回
         return redirect()->route('admin.event.index')->with('success','开奖成功');
-        
+
     }
 }

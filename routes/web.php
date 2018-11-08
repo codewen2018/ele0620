@@ -17,7 +17,27 @@ Route::get('/', function () {
 });
 
 Route::get("fuck",function (){
-    return "fuck";
+    //1.创建操作微信的对象
+    $app = new \EasyWeChat\Foundation\Application(config('wechat'));
+    //2.得到支付对象
+    $payment = $app->payment;
+    //3.生成订单
+    //3.1 订单配置
+    $attributes = [
+        'trade_type'       => 'NATIVE', // JSAPI，NATIVE，APP...
+        'body'             => '源码点餐',
+        'detail'           => '源码点餐',
+        'out_trade_no'     => time(),
+        'total_fee'        => 100, // 单位：分
+        'notify_url'       => 'http://wenwww.zhilipeng.com/api/order/ok', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+        // 'openid'           => '当前用户的 openid', // trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识，
+        // ...
+    ];
+    //3.2 订单生成
+    $order = new \EasyWeChat\Payment\Order($attributes);
+    //4.统一下单
+    $result = $payment->prepare($order);
+    return $result;
 });
 Route::get("test", function () {
 
