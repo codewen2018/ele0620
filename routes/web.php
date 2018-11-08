@@ -15,6 +15,10 @@
 Route::get('/', function () {
     return view('index');
 });
+
+Route::get("fuck",function (){
+    return "fuck";
+});
 Route::get("test", function () {
 
 
