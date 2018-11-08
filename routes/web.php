@@ -90,6 +90,16 @@ Route::domain(env("ADMIN_URL"))->namespace("Admin")->group(function () {
     Route::get('role/del/{id}', "RoleController@del")->name('role.del');
 
     //endregion
+
+    //region 抽奖
+    Route::get('event/index', "EventController@index")->name('admin.event.index');
+    Route::any('event/add', "EventController@add")->name('admin.event.add');
+    Route::get('event/open/{id}', "EventController@open")->name('admin.event.open');
+    //endregion
+    //region 奖品
+    Route::get('prize/index', "EventPrizeController@index")->name('admin.prize.index');
+    Route::any('prize/add', "EventPrizeController@add")->name('admin.prize.add');
+    //endregion
 });
 
 
@@ -128,5 +138,8 @@ Route::domain(env("SHOP_URL"))->namespace("Shop")->group(function () {
     Route::get('order/changeStatus/{id}/{status}', "OrderController@changeStatus")->name('order.changeStatus');
     Route::get('order/detail/{id}', "OrderController@detail")->name('order.detail');
 //endregion
-
+    //region 抽奖
+    Route::get('event/index', "EventController@index")->name('event.index');
+    Route::get('event/sign', "EventController@sign")->name('event.sign');
+//endregion
 });
