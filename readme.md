@@ -1385,4 +1385,34 @@
 
    PHP版本和MYSQL版本最好和本地开发环境保持一致
 
-5. 
+5. 用SSH管理工具进入到/www/wwwroot 目录下 执行如下命令
+
+   ```sh
+   git clone https://github.com/codewen2018/ele0620.git
+   ```
+
+6. 给composer 自己升级 并且设置中国镜像
+
+   ```sh
+   composer self-update
+   composer config -g repo.packagist composer https://packagist.laravel-china.org
+   ```
+
+7. 重新安装composer相关包
+
+   ```sh
+   composer install 
+   ```
+
+   > 安装 fileinfo 扩展
+   >
+   > 删除 proc_open 函数
+   >
+   >  proc_get_status() 
+
+8. 复制.env 
+
+   ```sh
+   cp .env.example .env
+   
+   ```

@@ -1,4 +1,4 @@
-@extends("admin.layouts.main")
+@extends("admin.layouts.login")
 @section('content')
 
     <h1 class="text-center">平台登录</h1>

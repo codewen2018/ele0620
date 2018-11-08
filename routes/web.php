@@ -34,7 +34,7 @@ Route::get("test", function () {
 });
 
 
-Route::domain("admin.ele.com")->namespace("Admin")->group(function () {
+Route::domain(env("ADMIN_URL"))->namespace("Admin")->group(function () {
     //region 后台用户
     #后台用户登录
     Route::any('admin/login', "AdminController@login")->name('admin.login');
@@ -89,7 +89,7 @@ Route::domain("admin.ele.com")->namespace("Admin")->group(function () {
 });
 
 
-Route::domain("shop.ele.com")->namespace("Shop")->group(function () {
+Route::domain(env("SHOP_URL"))->namespace("Shop")->group(function () {
     //region 商户首页
     Route::get("index/index", "IndexController@index")->name("shop.index.index");
     //endregion

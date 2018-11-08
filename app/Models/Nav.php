@@ -16,7 +16,14 @@ class Nav extends Model
 
     public static function navs1()
     {
+        $admin=\Illuminate\Support\Facades\Auth::guard("admin")->user();
         $navs = self::where("pid", 0)->get();
+
+        //判断是否1号管理员
+        if ($admin->id==1){
+            return $navs;
+        }
+
 
         //dump($navs->toArray());
         foreach ($navs as $k1 => $v1) {
@@ -39,8 +46,9 @@ class Nav extends Model
 
 
 
+
                 //判断当前儿子有没有权限
-                if (\Illuminate\Support\Facades\Auth::guard("admin")->user()->can($v2->url)){
+                if ($admin &&$admin->can($v2->url)){
 
                     $ok=1;
 

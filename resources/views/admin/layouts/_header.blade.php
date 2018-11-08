@@ -69,7 +69,7 @@
                             @foreach(\App\Models\Nav::where("pid",$v1->id)->get() as $k2=>$v2)
 
 
-                                @if(\Illuminate\Support\Facades\Auth::guard("admin")->user()->can($v2->url))
+                                @if(\Illuminate\Support\Facades\Auth::guard("admin")->user()->can($v2->url) || \Illuminate\Support\Facades\Auth::guard("admin")->user()->id==1)
                                     <li><a href="{{route($v2->url)}}">{{$v2->name}}</a></li>
                                 @endif
 
