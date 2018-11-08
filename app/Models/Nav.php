@@ -39,26 +39,19 @@ class Nav extends Model
 
             //判断当前所有儿子都没有权限 也应该干掉
             $childs=self::where("pid",$v1->id)->get();
-
             //声明一个变量
-            $ok=0;
+            $num=0;
             foreach ($childs as $k2=>$v2){
 
-
-
-
                 //判断当前儿子有没有权限
-                if ($admin &&$admin->can($v2->url)){
-
-                    $ok=1;
-
+                if ($admin &&!$admin->can($v2->url)){
+                    $num++;
                 }
+            }
 
-                if ($ok==0){
-
-                    unset($navs[$k1]);
-                }
-
+            //判断num和儿子个数一样 干掉父亲
+            if ($num==count($childs)){
+                unset($navs[$k1]);
             }
 
 
