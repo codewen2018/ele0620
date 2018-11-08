@@ -1391,14 +1391,22 @@
    git clone https://github.com/codewen2018/ele0620.git
    ```
 
-6. 给composer 自己升级 并且设置中国镜像
+6. 添加一个网站 设置三个域名
+
+   > 运行目录public
+   >
+   > 去掉跨站脚本攻击
+   >
+   > 重启PHP
+
+7. 给composer 自己升级 并且设置中国镜像
 
    ```sh
    composer self-update
    composer config -g repo.packagist composer https://packagist.laravel-china.org
    ```
 
-7. 重新安装composer相关包
+8. 重新安装composer相关包
 
    ```sh
    composer install 
@@ -1410,9 +1418,36 @@
    >
    >  proc_get_status() 
 
-8. 复制.env 
+9. 复制.env  并重新生成key
 
    ```sh
    cp .env.example .env
-   
+   php artisan key:generate
    ```
+
+10. 设置项目所有者
+
+    ```sh
+    chown -R www.www /www/wwwroot/ele0620
+    ```
+
+
+
+
+
+
+##### 重新部署
+
+1. 更新代码到github
+
+2. 登录服务器，从github克隆代码
+
+   ```sh
+   git clone https://github.com/codewen2018/ele0620.git  ele
+   ```
+
+3. 执行composer install
+
+4. 建立虚拟主机
+
+5. 
