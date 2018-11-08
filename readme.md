@@ -1303,3 +1303,86 @@
 | url      | string  | 地址       |
 | sort     | int     | 排序       |
 | pid      | int     | 上级菜单id |
+
+# Day12
+
+### 开始任务
+
+#### 平台 
+
+- 抽奖活动管理[报名人数限制、报名时间设置、开奖时间设置] 
+
+- 抽奖报名管理[可以查看报名的账号列表] 
+
+- 活动奖品管理[开奖前可以给该活动添加、修改、删除奖品] 
+
+- 开始抽奖[根据报名人数随机抽取活动奖品,将活动奖品和报名的账号随机匹配] 
+
+- 抽奖完成时，给中奖商户发送中奖通知邮件 
+
+#### 商户 
+
+- 抽奖活动列表 
+
+- 报名抽奖活动 
+
+- 查看抽奖活动结果
+
+### 数据表参考
+
+#### 抽奖活动表 events
+
+| 字段名称   | 类型    | 备注         |
+| ---------- | ------- | ------------ |
+| id         | primary | 主键         |
+| title      | string  | 名称         |
+| content    | text    | 详情         |
+| start_time | int     | 报名开始时间 |
+| end_time   | int     | 报名结束时间 |
+| prize_time | int     | 开奖时间     |
+| num        | int     | 报名人数限制 |
+| is_prize   | boolean | 是否已开奖   |
+
+#### 抽奖活动奖品表 event_prizes
+
+| 字段名称    | 类型    | 备注           |
+| ----------- | ------- | -------------- |
+| id          | primary | 主键           |
+| event_id    | int     | 活动id         |
+| name        | string  | 奖品名称       |
+| description | text    | 奖品详情       |
+| user_id     | int     | 中奖商家账号id |
+
+#### 活动报名表 event_users
+
+| 字段名称 | 类型    | 备注       |
+| -------- | ------- | ---------- |
+| id       | primary | 主键       |
+| event_id | int     | 活动id     |
+| user_id  | int     | 商家账号id |
+
+### 实现步骤
+
+#### 上线步骤
+
+1. 解析域名 www   @  * =====服务器IP   A记录
+
+2. 登录服务器 执行命令安装宝塔
+
+   ```sh
+   yum install -y wget && wget -O install.sh http://download.bt.cn/install/install.sh && sh install.sh
+   ```
+
+3. 登录宝塔管理网址
+
+   ```ini
+   Bt-Panel: http://132.232.143.76:8888
+   username: *****
+   password: *****
+   ```
+
+4. 安装Lamp环境
+
+   PHP版本和MYSQL版本最好和本地开发环境保持一致
+
+5. 

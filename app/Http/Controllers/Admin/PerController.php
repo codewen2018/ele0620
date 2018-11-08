@@ -20,7 +20,7 @@ class PerController extends Controller
         //循环得到单个路由
         foreach ($routes as $route) {
            //判断命名空间是 后台的
-            if ($route->action["namespace"]=="App\Http\Controllers\Admin"){
+            if (isset($route->action["namespace"]) && $route->action["namespace"]=="App\Http\Controllers\Admin"){
                 //取别名存到$urls中
                 $urls[]=$route->action['as'];
             }

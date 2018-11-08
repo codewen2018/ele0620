@@ -16,15 +16,65 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">首页 <span class="sr-only">(current)</span></a></li>
-                @foreach(\App\Models\Nav::where("pid",0)->get() as $k1=>$v1)
+                <?php
+               /* $navs = \App\Models\Nav::where("pid", 0)->get();
+
+                dump($navs->toArray());
+                foreach ($navs as $k1 => $v1) {
+
+
+                    //找出第一个儿子
+                    $child = \App\Models\Nav::where("pid", $v1->id)->first();
+
+                    //如果没有儿子，把它父亲干掉
+                    if ($child == null) {
+
+                        unset($navs[$k1]);
+                    }
+
+                    //判断当前所有儿子都没有权限 也应该干掉
+                    $childs=\App\Models\Nav::where("pid",$v1->id)->get();
+
+                    //声明一个变量
+                    $ok=0;
+                    foreach ($childs as $k2=>$v2){
+
+
+
+                        //判断当前儿子有没有权限
+                        if (\Illuminate\Support\Facades\Auth::guard("admin")->user()->can($v2->url)){
+
+                            $ok=1;
+
+                        }
+
+                        if ($ok==0){
+
+                            unset($navs[$k1]);
+                        }
+
+                    }
+
+
+                }*/
+
+
+                ?>
+                @foreach(\App\Models\Nav::navs1() as $k1=>$v1)
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">{{$v1->name}} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
                             @foreach(\App\Models\Nav::where("pid",$v1->id)->get() as $k2=>$v2)
-                            <li><a href="{{route($v2->url)}}">{{$v2->name}}</a></li>
-                             @endforeach
+
+
+                                @if(\Illuminate\Support\Facades\Auth::guard("admin")->user()->can($v2->url))
+                                    <li><a href="{{route($v2->url)}}">{{$v2->name}}</a></li>
+                                @endif
+
+
+                            @endforeach
                         </ul>
                     </li>
                 @endforeach
