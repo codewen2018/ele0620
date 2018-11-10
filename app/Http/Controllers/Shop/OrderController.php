@@ -100,7 +100,5 @@ class OrderController extends BaseController
      $goods=   OrderGood::select(DB::raw("goods_id,goods_name,sum(amount) as nums"))->whereIn("order_id",$orderIds)->groupBy("goods_id")->get();
      dd($goods->toArray());
        // dd($orderIds->toArray());
-
-
     }
 }
