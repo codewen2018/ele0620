@@ -181,6 +181,11 @@ return [
 
         //Ueditor
         Overtrue\LaravelUEditor\UEditorServiceProvider::class,
+        /**
+         * TNTSearch 全文搜索
+         */
+        Laravel\Scout\ScoutServiceProvider::class,
+        Vanry\Scout\TNTSearchScoutServiceProvider::class,
 
     ],
 

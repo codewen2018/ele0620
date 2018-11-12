@@ -27,6 +27,7 @@ Route::namespace("Api")->group(function (){
     Route::post("member/login","MemberController@login");
     Route::post("member/reg","MemberController@reg");
     Route::get("member/detail","MemberController@detail");
+    Route::get("member/money","MemberController@money");
 
 //地址管理
     Route::post("address/add","AddressController@add");
@@ -43,7 +44,8 @@ Route::namespace("Api")->group(function (){
     Route::get("order/index","OrderController@index");
     Route::get("order/wxPay","OrderController@wxPay");
     Route::get("order/status","OrderController@status");
-    Route::get("order/ok","OrderController@ok");
+    Route::post("order/ok","OrderController@ok");
+    Route::get("order/clear","OrderController@clear");
 
 
 });

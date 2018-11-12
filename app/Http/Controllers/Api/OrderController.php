@@ -324,7 +324,10 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
-        return $order;
+
+        return [
+            "status"=>$order->status
+        ];
 
 
     }
@@ -365,5 +368,46 @@ class OrderController extends Controller
         });
 
         return $response;
+    }
+
+    /**
+     * 清除超时未支付的订单
+     */
+    public function clear(){
+
+        //1. 找出需要处理的订单
+        /**
+         *  当前时间-创建时间>15*60
+         * 当前时间>创建时间+15*60
+         * 当前时间-15*60>创建时间
+         * 创建时时间<当前时间-15*60
+         *
+         * "2018-12-12 08:12:11"  < time()-15*60=== 123141234=====>date("Y-m-d H:i:s")
+         *
+         */
+       $orders= Order::where("status",0)->where("created_at","<",date("Y-m-d H:i:s",time()-15*60))->get();
+
+
+       //循环的订单
+       foreach ($orders as $order){
+           $order->status=-1;
+           $order->save();
+
+           //取出当前订单的商品
+           $goods=OrderGood::where("order_id",$order->id)->get();
+           //退库存
+           foreach ($goods as $good){
+               $amount=$good->amount;
+               $menuId=$good->goods_id;
+               //操作menu表
+               Menu::where("id",$menuId)->increment("stock",$amount);
+
+           }
+
+
+
+       }
+       //dd($orders->toArray());
+
     }
 }

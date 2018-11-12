@@ -16,7 +16,15 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get("fuck",function (){
+Route::get('/welcome', function () {
+    $html = (string)view('welcome');
+
+    file_put_contents(public_path("welcome.html"),$html);
+
+    return $html;
+});
+
+Route::get("fuck", function () {
     //1.创建操作微信的对象
     $app = new \EasyWeChat\Foundation\Application(config('wechat'));
     //2.得到支付对象
@@ -24,12 +32,12 @@ Route::get("fuck",function (){
     //3.生成订单
     //3.1 订单配置
     $attributes = [
-        'trade_type'       => 'NATIVE', // JSAPI，NATIVE，APP...
-        'body'             => '源码点餐',
-        'detail'           => '源码点餐',
-        'out_trade_no'     => time(),
-        'total_fee'        => 100, // 单位：分
-        'notify_url'       => 'http://wenwww.zhilipeng.com/api/order/ok', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+        'trade_type' => 'NATIVE', // JSAPI，NATIVE，APP...
+        'body' => '源码点餐',
+        'detail' => '源码点餐',
+        'out_trade_no' => time(),
+        'total_fee' => 100, // 单位：分
+        'notify_url' => 'http://wenwww.zhilipeng.com/api/order/ok', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
         // 'openid'           => '当前用户的 openid', // trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识，
         // ...
     ];
@@ -43,13 +51,13 @@ Route::get("test", function () {
 
 
     //$content = 'test';//邮件内容
-    $shopName="互联网学院";
+    $shopName = "互联网学院";
     $to = 'wjx@itsource.cn';//收件人
-    $subject = $shopName.' 审核通知';//邮件标题
+    $subject = $shopName . ' 审核通知';//邮件标题
     \Illuminate\Support\Facades\Mail::send(
         'emails.shop',
-       compact("shopName"),
-        function ($message) use($to, $subject) {
+        compact("shopName"),
+        function ($message) use ($to, $subject) {
             $message->to($to)->subject($subject);
         }
     );

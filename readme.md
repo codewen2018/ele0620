@@ -1677,3 +1677,199 @@
    
        }
    ```
+
+
+
+# Day15
+
+### 开发任务
+
+#### 网站优化 
+
+\- 高并发下,使用redis解决活动报名问题 
+\- 店铺列表和详情接口使用redis做缓存,减少数据库压力 
+\- 自动清理超时未支付订单 
+\- 活动列表页和活动详情页,页面静态化
+
+#### 接口安全
+
+HTTPS+TOKEN+数字签名
+
+### 实现步骤
+
+#### 报名
+
+1. 在添加抽奖活动的时候把报名人数存到redis中 event_num:id      10
+2. 报名
+3. redis 持久化
+4. 开奖也用redis,在开奖的同时把数据同步到数据库中
+
+
+
+#### 缓存
+
+1. 判断redis中有没有缓存，如果有，直接返回
+
+2. 如果没有，在数据库中取出，并把把结果存到redis中
+
+3. 存的的时候要加过期时间，在做写操作的时候要删除对应的缓存
+
+   > 访问量大，不经常改动的东西可以使用缓存 eg:分类列表
+
+
+
+#### 超时未支付的订单
+
+##### 定时任务版
+
+1. 找出所有超时未支付的订单，然后更改状态为-1
+2. 在宝塔上设置定时任务，每分钟访问一次URL地址
+
+> 缺点：只能精确到分钟
+
+##### 命令行版本
+
+1. php artisan make:command OrderClear
+
+2. 打开 E:\web\ele\app\Console\Commands\OrderClear.php 文件
+
+   ```php
+   <?php
+   
+   namespace App\Console\Commands;
+   
+   use Illuminate\Console\Command;
+   
+   class OrderClear extends Command
+   {
+       /**
+        * The name and signature of the console command.
+        *
+        * @var string
+        */
+       //命令的名称
+       protected $signature = 'order:clear';
+   
+       /**
+        * The console command description.
+        *
+        * @var string
+        */
+       protected $description = 'order clear 11111';
+   
+       /**
+        * Create a new command instance.
+        *
+        * @return void
+        */
+       public function __construct()
+       {
+           parent::__construct();
+       }
+   
+       /**
+        * Execute the console command.
+        *
+        * @return mixed
+        */
+       //所有逻辑处理放在这里
+       public function handle()
+       {
+           /**
+            * 1.找出 超时   未支付   订单
+            * 当前时间-创建时间>15*60
+            * 当前时间-15*60>创建时间
+            * 创建时间<当前时间-15*60
+            * */
+           while (true){
+               $orders=\App\Models\Order::where("status",0)->where('created_at','<',date("Y-m-d H:i:s",(time()-15*60)))->update(['status'=>-1]);
+               if ($orders){
+                   echo date("Y-m-d H:i:s")." clear ok".PHP_EOL;
+               }else{
+                   echo date("Y-m-d H:i:s")."no orders";
+               }
+               sleep(5);
+           }
+       }
+   }
+   
+   ```
+
+3. 执行命令 php artisan order:clear
+
+#### 页面静态化
+
+```php
+Route::get('/test', function () {
+
+    //页面静态化
+    $html=(string)view('welcome');
+
+    file_put_contents(public_path('test.html'),$html);
+
+});
+```
+
+#### 接口安全
+
+##### https
+
+##### token
+
+1.用户提交“用户名”和“密码”，实现登录
+
+2.登录成功后，服务端返回一个 token，生成规则参考如下：token = md5('用户的id' + 'Unix时间戳')
+
+3.服务端将生成 token和用户id的对应关系保存到redis，并设置有效期（例如7天）
+
+4.客户端每次接口请求时，如果接口需要用户登录才能访问，则需要把 user_id 与 token 传回给服务端
+
+5.服务端验证token 和用户id的关系，更新token 的过期时间（延期，保证其有效期内连续操作不掉线）
+
+##### 数字签名
+
+1.对除签名外的所有请求参数按key做升序排列 （假设当前时间的时间戳是12345678）
+
+例如：有c=3,b=2,a=1 三个参，另加上时间戳后， 按key排序后为：a=1，b=2，c=3，timestamp=12345678。
+
+2.把参数名和参数值连接成字符串，得到拼装字符：a1b2c3timestamp12345678
+
+3.用密钥连接到接拼装字符串头部和尾部，然后进行32位MD5加密，最后将到得MD5加密摘要转化成大写。
+
+
+
+
+
+## 项目技术点整理
+
+1. 购物流程:购物车和订单
+2. 用户注册手机号码使用短信进行验证
+3. 短信验证码使用redis保存,利用redis过期时间特性验证有效性
+4. 图片上传到阿里云OSS对象存储,减少服务器流量压力
+5. 平台活动页面静态化
+6. 创建订单使用事务,保证订单表和订单商品表数据同时添加成功
+7. 首页商家列表接口使用redis做缓存
+8. 编写PHP脚本,定时自动清理超时未支付订单
+9. 后台使用RBAC权限管理
+10. 微信支付
+11. 提醒功能:下单成功,可通过邮件 短信发送提醒信息
+12. 前后端分离,API接口开发,接口安全
+13. 查询菜品功能使用中文分词(tntsearch)搜索
+
+
+
+
+
+## 项目相关面试题
+
+- 项目介绍(项目名称,这个项目是为了解决什么问题而开发的,有什么特点)
+- 项目开发团队人员组成(2-3个PHP加1个前端)
+- 项目开发周期(需求分析1个月,开发3个月,测试上线1个月)
+- 项目功能模块有哪些?你负责哪里功能模块的开发?
+- 你和前端是如何协同开发的?(接口文档)
+- 你的项目代码是如何管理的?(git,码云)
+- 微信支付开发流程?如何判断用户已经支付?
+- 项目中哪些地方使用到了redis?
+- 你在项目中是如何优化你的sql的?
+- 你的在线订餐流程是如何设计的?
+- 你的项目上线没有?

@@ -32,7 +32,7 @@ class MemberController extends Controller
         //Session>文件缓存>数据库>Redis
         /* Redis::set("tel_".$tel,$code);
          Redis::expire("tel_".$tel,60*5);*/
-        Redis::setex("tel_" . $tel, 60*5, $code);
+        Redis::setex("tel_" . $tel, 60 * 5, $code);
         //Cache::set("tel_",$code,1);
 
         //4.把验证码发给手机号
@@ -45,9 +45,9 @@ class MemberController extends Controller
 
 
         $sms = new AliSms();
-        $response = $sms->sendSms($tel, 'SMS_149417370', ['code'=> $code], $config);
-       //  dd($response);
-        if ($response->Code=="OK"){
+        $response = $sms->sendSms($tel, 'SMS_149417370', ['code' => $code], $config);
+        //  dd($response);
+        if ($response->Code == "OK") {
 
             //5. 返回
             $data = [
@@ -56,7 +56,7 @@ class MemberController extends Controller
             ];
 
 
-        }else{
+        } else {
             $data = [
                 "status" => false,
                 "message" => $response->Message
@@ -66,6 +66,7 @@ class MemberController extends Controller
         return $data;
 
     }
+
     /**
      * 用户注册
      */
@@ -100,7 +101,7 @@ class MemberController extends Controller
         //验证 验证码
         //1.取出验证码
         $code = Redis::get("tel_" . $data['tel']);
-       // return $code;
+        // return $code;
         //2.判断验证码是否和取出的一致
         if ($code != $data['sms']) {
             //返回错误
@@ -113,7 +114,7 @@ class MemberController extends Controller
         }
         //密码加密
         //  $data['password'] = bcrypt($data['password']);
-        $data['password'] =Hash::make($data['password']);
+        $data['password'] = Hash::make($data['password']);
         //数据入库
         Member::create($data);
         //返回数据
@@ -121,8 +122,6 @@ class MemberController extends Controller
             'status' => "true",
             "message" => "添加成功"
         ];
-
-
 
 
     }
@@ -140,12 +139,21 @@ class MemberController extends Controller
         //3.如果密码也成功 登录成功
         if ($member && Hash::check($request->post('password'), $member->password)) {
 
+            //生成Token
+            $token = md5($member->id . time());
+
+            //存redis
+            /*Redis::set("member:".$member->id,$token);
+            Redis::EXPIRE("member:".$member->id,60*60*24*7);*/
+
+            Redis::setex("member:" . $member->id, 60 * 60 * 24 * 7, $token);
 
             return [
                 'status' => 'true',
                 'message' => '登录成功',
-                'user_id'=>$member->id,
-                'username'=>$member->username,
+                'user_id' => $member->id,
+                'username' => $member->username,
+                'token' => md5($member->id . time())
             ];
 
         }
@@ -164,6 +172,65 @@ class MemberController extends Controller
     public function detail(Request $request)
     {
         return Member::find($request->get('user_id'));
+    }
+
+    public function money()
+    {
+       /* //密钥
+        $key="itsouceasfwqrfwef23124";
+
+        $data = \request()->all();
+        unset($data['sign']);
+       //按Key排序
+        ksort($data);
+        //id2money100time12123412token12342fsdfa
+
+        $str="";
+        foreach ($data as $k=>$v){
+
+            $str=$str.$k.$v;
+        }
+        $sign=md5($key.$str.$key);
+        dump($data);
+        dump($str);
+        dd($sign);*/
+
+       //验证签名
+        $key="itsouceasfwqrfwef23124";
+        $data=\request()->all();
+        unset($data["sign"]);
+        //排序
+        ksort($data);
+        //拼接
+        $str="";
+        foreach ($data as $k=>$v){
+            $str=$str.$k.$v;
+        }
+
+        //你验证后得到签名
+        $sign=md5($key.$str.$key);
+
+        if ($sign!=\request()->get("sign")){
+            return "不要乱动";
+        }
+
+
+
+        $memberId = \request()->get("id");
+
+        $money = \request()->get("money");
+        $token = \request()->get("token");
+
+        //验证Token
+        $tokenRedis = Redis::get("member:" . $memberId);
+
+        if ($token != $tokenRedis) {
+            return "fuck";
+        }
+
+        Member::where("id", $memberId)->increment("money", $money);
+
+
     }
 
 }
